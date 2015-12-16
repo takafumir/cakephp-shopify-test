@@ -1,26 +1,76 @@
-# CakePHP Application Skeleton
+#### This is a repository for testing CakePHP-Shopify-Plugin with CakePHP 3.
 
-[![Build Status](https://api.travis-ci.org/cakephp/app.png)](https://travis-ci.org/cakephp/app)
-[![License](https://poser.pugx.org/cakephp/app/license.svg)](https://packagist.org/packages/cakephp/app)
+The following explanation is how to set up CakePHP-Shopify-Plugin with CakePHP 3. CakePHP-Shopify-Plugin is a plugin for CakePHP 2.
 
-A skeleton for creating applications with [CakePHP](http://cakephp.org) 3.x.
 
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
+#### 1. Create a new CakePHP 3 project.
 
-## Installation
-
-1. Download [Composer](http://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
-
-If Composer is installed globally, run
-```bash
-composer create-project --prefer-dist cakephp/app [app_name]
+```
+$ composer create-project --prefer-dist cakephp/app shopify_test
+$ cd shopify_test
 ```
 
-You should now be able to visit the path to where you installed the app and see
-the setup traffic lights.
 
-## Configuration
+#### 2. Generate Shopify plugin for CakePHP 3.
 
-Read and edit `config/app.php` and setup the 'Datasources' and any other
-configuration relevant for your application.
+```
+$ bin/cake bake plugin Shopify
+```
+
+This will generate the follwing code.
+
+- composer.json
+```
+"Shopify\\": "./plugins/Shopify/src"
+"Shopify\\Test\\": "./plugins/Shopify/tests"
+```
+
+- config/bootstrap.php
+```
+Plugin::load('Shopify', ['bootstrap' => false, 'routes' => true]);
+```
+
+
+#### 3. Download & Install CakePHP-Shopify-Plugin.
+
+Download https://github.com/cmcdonaldca/CakePHP-Shopify-Plugin and copy the files into plugins/Shopify like following. See this repository structure also.
+
+- plugins/Shopify/config/shopify.php
+- plugins/Shopify/src/Controller
+- plugins/Shopify/src/View
+
+
+#### 4. Refresh autoload path.
+
+```
+$ composer dumpautoload
+```
+
+
+#### 5. Add code to load Shopify component.
+
+- PagesController.php
+```
+public $components = ['Shopify.ShopifyAuth'];
+```
+
+- ShopifyAuthComponent.php
+```
+namespace Shopify\Controller\Component;
+
+use Cake\Controller\Component;
+```
+
+#### Other errors occur.
+
+That's it. This way fixes errors of 'component not be found' but other errors will occure like followings. 
+
+- Fatal error: Call-time pass-by-reference has been removed in /path/to/shopify_test/plugins/Shopify/src/Controller/Component/ShopifyAuthComponent.php on line 112
+
+This code is old.
+
+- SessionComponent could not be found. 
+
+CakePHP 3 abolished Session component.
+
+I reccomend that CakePHP-Shopify-Plugin should not be used with CakePHP 3.
