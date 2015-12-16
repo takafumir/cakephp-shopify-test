@@ -1,4 +1,7 @@
 <?php
+namespace Shopify\Controller\Component;
+
+use Cake\Controller\Component;
 
 class ShopifyAuthComponent extends Component {
 

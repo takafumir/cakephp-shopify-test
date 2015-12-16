@@ -27,6 +27,7 @@ use Cake\View\Exception\MissingTemplateException;
  */
 class PagesController extends AppController
 {
+    public $components = ['Shopify.ShopifyAuth'];
 
     /**
      * Displays a view
